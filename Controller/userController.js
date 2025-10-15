@@ -172,6 +172,42 @@ const getUserInfo = async (req, res) => {
     res.status(500).json({ message: "Server error while getting user info." });
   }
 };
+// image upload_controller
+// controllers/userController.js
+const updateProfilePicture = async (req, res) => {
+  try {
+    const userId = req.user.id; // assuming user is authenticated via middleware
+    const file = req.file;
+
+    if (!file) {
+      return res.status(400).json({ message: 'No image uploaded.' });
+    }
+
+    // Create file URL (you can also use Cloudinary here)
+    const imageUrl = `/uploads/profilepics/${file.filename}`;
+
+    // Update user info
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { profilePic: imageUrl },
+      { new: true }   // return updated user
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    res.json({
+      message: 'Profile picture updated successfully.',
+      user
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error.' });
+  }
+};
+
 
 module.exports = {
   signupController,
@@ -179,5 +215,6 @@ module.exports = {
   loginController,
   verifyLimiter,
   resendLimiter,
-  getUserInfo
+  getUserInfo,
+  updateProfilePicture
 };

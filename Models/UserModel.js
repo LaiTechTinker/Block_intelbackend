@@ -18,6 +18,10 @@ name: {
       type: String,
       required: true,
     },
+     profilePic: {
+    type: String,
+    default: 'https://share.google/images/nQUi89WkWTGzidqJ2'  // Default profile picture
+  },
       isVerified: { type: Boolean, default: false },
 
 },
